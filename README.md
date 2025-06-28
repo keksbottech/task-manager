@@ -1,3 +1,56 @@
+# TaskMaster - Smart Task Management
+
+A modern task management application with intelligent reminders and notifications.
+
+## Features
+
+- **Task Management**: Create, edit, delete, and complete tasks
+- **Priority Levels**: Set low, medium, or high priority for tasks
+- **Smart Reminders**: Set due dates and times for tasks
+- **Notification System**: Multiple notification types when tasks are due
+
+## Notification System
+
+The app includes a comprehensive notification system that triggers when tasks become due:
+
+### Notification Types
+
+1. **Audio Notification**: Plays a ring sound (`/public/ring.mp3`)
+2. **Browser Notification**: Native browser notifications (requires permission)
+3. **Visual Alert**: In-app notification banner
+4. **Fallback Alert**: Browser alert dialog
+
+### How It Works
+
+- **Real-time Checking**: The app checks for due tasks every 10 seconds
+- **Overdue Detection**: Tasks that are already overdue when the page loads will trigger notifications
+- **Duplicate Prevention**: Each task can only trigger one notification (tracked via `reminderSent` flag)
+- **Persistent State**: Notification status is saved to the database
+
+### Testing Notifications
+
+Use the "Test Notification" button in the header to manually trigger a notification and verify the system is working.
+
+### Browser Permissions
+
+The app will request notification permission when you first visit. Grant permission to receive browser notifications.
+
+## Setup
+
+1. Install dependencies: `npm install`
+2. Set up MongoDB connection
+3. Run the development server: `npm run dev`
+4. Open [http://localhost:3000](http://localhost:3000)
+
+## Troubleshooting
+
+If notifications aren't working:
+
+1. Check browser console for error messages
+2. Ensure notification permissions are granted
+3. Verify the audio file exists at `/public/ring.mp3`
+4. Try the "Test Notification" button to verify the system
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
