@@ -34,6 +34,22 @@ interface Task {
   reminderSent?: boolean
 }
 
+// Utility: Convert local datetime-local string to UTC ISO string
+function localToUTCISOString(localDateTime: string) {
+  if (!localDateTime) return '';
+  const date = new Date(localDateTime);
+  return date.toISOString();
+}
+
+// Utility: Convert UTC ISO string to local datetime-local string (for input value)
+function utcToLocalInputValue(utcISOString: string) {
+  if (!utcISOString) return '';
+  const date = new Date(utcISOString);
+  const tzOffset = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - tzOffset * 60 * 1000);
+  return localDate.toISOString().slice(0, 16);
+}
+
 export default function DashboardPage() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -320,7 +336,10 @@ export default function DashboardPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          reminderTime: localToUTCISOString(formData.reminderTime),
+        }),
       })
 
       if (response.ok) {
@@ -352,7 +371,10 @@ export default function DashboardPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          reminderTime: localToUTCISOString(formData.reminderTime),
+        }),
       })
 
       if (response.ok) {
@@ -428,7 +450,7 @@ export default function DashboardPage() {
       title: task.title,
       description: task.description,
       priority: task.priority,
-      reminderTime: task.reminderTime,
+      reminderTime: utcToLocalInputValue(task.reminderTime),
     })
   }
 
